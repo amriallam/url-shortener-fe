@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const RedirectPage = () => {
   const { shortCode } = useParams();
-  const navigate = useNavigate();
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [showQR, setShowQR] = useState(false);
-  const [qrCode, setQrCode] = useState<string | null>(null);
   const [longUrl, setLongUrl] = useState<string | null>(null);
 
   useEffect(() => {
@@ -32,21 +29,6 @@ const RedirectPage = () => {
       });
     return () => { isMounted = false; };
   }, [shortCode]);
-
-  const handleShowQR = async () => {
-    if (!shortCode) return;
-    const apiBase = import.meta.env.VITE_API_BASE_URL;
-    setShowQR(true);
-    setQrCode(null);
-    try {
-      const response = await fetch(`${apiBase}/${shortCode}/qr`);
-      if (!response.ok) throw new Error('Failed to fetch QR');
-      const data = await response.json();
-      setQrCode(data.qrCode);
-    } catch {
-      setQrCode(null);
-    }
-  };
 
   if (loading) {
     return (
@@ -105,19 +87,6 @@ const RedirectPage = () => {
         >
           Go to Original URL
         </a>
-        <br />
-        <button
-          onClick={handleShowQR}
-          className="inline-flex items-center px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-md transition-colors"
-        >
-          {qrCode ? 'Show QR Again' : 'Show QR Code'}
-        </button>
-        {showQR && qrCode && (
-          <div className="mt-6 flex flex-col items-center">
-            <img src={qrCode} alt="QR Code" className="w-48 h-48" />
-            <p className="mt-2 text-gray-500">Scan to open the link</p>
-          </div>
-        )}
       </div>
     </div>
   );

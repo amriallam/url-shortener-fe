@@ -2,7 +2,6 @@
 
 export async function generateShortUrl(originalUrl: string): Promise<string> {
   const apiBase = import.meta.env.VITE_API_BASE_URL;
-  const publicBase = import.meta.env.VITE_PUBLIC_BASE_URL || apiBase;
 
   const response = await fetch(`${apiBase}/`, {
     method: 'POST',
@@ -12,7 +11,7 @@ export async function generateShortUrl(originalUrl: string): Promise<string> {
 
   if (!response.ok) throw new Error('Failed to shorten URL');
   const data = await response.json();
-  return `${publicBase}/${data.shortCode}`;
+  return `${data.shortCode}`;
 }
 
 export function saveToHistory(originalUrl: string, shortUrl: string): void {
