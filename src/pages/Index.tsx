@@ -81,7 +81,7 @@ const Index = () => {
           <UrlForm onUrlShorten={handleUrlShortened} />
         </div>
         {history.length > 0 && (
-          <div className="flex items-center w-full max-w-3xl">
+          <div className="flex items-center w-full max-w-3xl justify-center">
             {history.length > VISIBLE_HISTORY && (
               <Button
                 variant="ghost"
